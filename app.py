@@ -9,3 +9,15 @@ def home():
 @app.route('/index.html')
 def home2():
     return render_template("index.html")
+
+@app.route('/curr.html')
+def map():
+    return render_template("curr.html")
+
+@app.route('/crowd.html')
+def crowd():
+    return render_template("crowd.html")
+
+@app.route('/lead.html')
+def lead():
+    return render_template("lead.html")
