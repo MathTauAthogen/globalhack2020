@@ -18,6 +18,8 @@ def map():
 def crowd():
     return render_template("crowd.html")
 
+peeps={"00001":{"name":"William Qin", "score":100, "add":5, "check":5}} #TODO: Get from database
+
 @app.route('/lead.html')
 def lead():
-    return render_template("lead.html")
+    return render_template("lead.html", peeps=peeps)
