@@ -1,4 +1,7 @@
 from flask import Flask, render_template, request
+import json
+import requests
+import tempfile
 app = Flask(__name__)
 #TODO: Add secret key
 
@@ -24,24 +27,45 @@ peeps={"00001":{"name":"William Qin", "score":100, "add":5, "check":5}} #TODO: G
 def lead():
     return render_template("lead.html", peeps=peeps)
 
-@app.route('/api/addplace', methods=["POST"])
+@app.route('/addplace', methods=["POST"])
 def add():
-    print(request.form)
     name = request.form["name"]
     coords = request.form["coords"]
-    print(coords)
-    coordsformatted = map(int,coords.split(","))
+    coordsformatted = [int(i) for i in coords.split(",")]
     info = request.form["info"]
     geojson = {
+        "markers": [], "type": "FeatureCollection", "properties": {}, "groups": [],
+        "features": [
+    {
         "type" : "Feature",
         "geometry" : {
             "type" : "Point",
             "coordinates" : coordsformatted
         },
         "properties" : {
-            "title" : name,
-            "description" : info
+            "title" : name.encode("utf-8"),
+            "description" : info.encode("utf-8")
         }
     }
-    print(geojson)
+    ]
+    }
+
+    url = 'https://maphub.net/api/1/map/append'
+
+    api_key = 'YWO4wwxjn2B8t6C8'
+
+    args = {
+        'file_type': 'geojson',
+        'map_id' : 90293
+    }
+
+    headers = {
+        'Authorization': 'Token ' + api_key,
+        'MapHub-API-Arg': json.dumps(args)
+    }
+    print(json.dumps(geojson))
+    with open("temp.json", "w+b") as f:
+        json.dump(geojson, f)
+        r = requests.post(url, headers=headers, data=f)
+    print(r.json())
     return render_template("crowd.html")
