@@ -9,21 +9,22 @@ app = Flask(__name__)
 
 from bs4 import BeautifulSoup
 import re
+currend = 0
 @app.before_first_request
 def init():
     global l
-    for i in range(0,100,10):
-        url = "https://www.google.com/search?q='covid'+'testing'+'sites'+'open'&tbl=qdr:d&start="+str(i)
+    global currend
+    for i in range(currend,currend+100,10):
+        url = "https://www.google.com/search?q='covid'+'testing'+'sites'+'new'+'open'&tbl=qdr:d&tmb=nws&start="+str(i)
         browser = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
         headers = {'User-Agent':browser,}
         page = requests.get(url)
         soup = BeautifulSoup(page.content, "lxml")
-        links = soup.findAll("a")
-        for link in  soup.find_all("a",href=re.compile("(?<=/url\?q=)(htt.*://.*)")):
-            l.append(re.split(":(?=http)",link["href"].replace("/url?q=",""))[0])
-    print(l)
-
-
+        for link in soup.find_all('a'):
+            if(link.get('href')[0:4]=="/url"):
+                l.append("https://google.com"+link.get('href'))
+        print(l)
+    currend = currend + 100
 l = []
 inc = -1
 
@@ -44,6 +45,8 @@ def crowd():
     global l
     global inc
     inc += 1
+    if(inc>=currend):
+        init()
     if(request.method=="POST"):
         try:
             name = request.form["name"]
@@ -94,16 +97,14 @@ def crowd():
 
             with open(tempname, "r") as fil:
                 r = requests.post(url, headers=headers, data=fil)
-            print(r.json().keys())
             newlist = [x.encode() for x in r.json().keys()]
-            print(newlist)
             if('error' not in newlist):
                 name=request.form["id"]
                 data.register(name)
                 data.giveUserPoints(name, 5)
                 data.userAdded(name)
         except Exception:
-            traceback.print_exc()
+            pass
     return render_template("crowd.html", link=l[inc])
 
 @app.route('/lead.html')
@@ -115,16 +116,12 @@ def start_runner():
     def start_loop():
         not_started = True
         while not_started:
-            print('In start loop')
             try:
                 r = requests.get('http://127.0.0.1:5000/')
                 if r.status_code == 200:
-                    print('Server started, quiting start_loop')
                     not_started = False
-                print(r.status_code)
             except:
-                print('Server not yet started')
-            time.sleep(2)
+                time.sleep(2)
 
 def run():
     from webapp import app
