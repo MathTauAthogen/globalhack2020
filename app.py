@@ -64,7 +64,7 @@ def add():
         'MapHub-API-Arg': json.dumps(args)
     }
     print(json.dumps(geojson))
-    with open("temp.json", "w+b") as f:
+    with tempfile.TemporaryFile() as f:
         json.dump(geojson, f)
         r = requests.post(url, headers=headers, data=f)
     print(r.json())
