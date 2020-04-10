@@ -11,7 +11,7 @@ import re
 def init():
     global l
     for i in range(0,100,10):
-        url = "https://www.google.com/search?q='covid'+'testing'+'sites'+'open'&start="+str(i)
+        url = "https://www.google.com/search?q='covid'+'testing'+'sites'+'open'&tbl=qdr:d&start="+str(i)
         browser = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
         headers = {'User-Agent':browser,}
         page = requests.get(url)
@@ -37,13 +37,13 @@ def home2():
 def map():
     return render_template("curr.html")
 
-@app.route('/crowd.html')
+@app.route('/crowd.html', methods=["GET","POST"])
 def crowd():
     global l
     global inc
     inc += 1
-    print(l)
     return render_template("crowd.html", link=l[inc])
+
 
 peeps={"00001":{"name":"wqin2008@gmail.com", "score":100, "add":5, "check":5}} #TODO: Get from database
 
@@ -55,6 +55,13 @@ def lead():
 def add():
     name = request.form["name"]
     coords = request.form["coords"]
+    try:
+        check = request.form["check"]
+        global inc
+        inc = inc - 1
+    except:
+        pass
+    inc = inc + 1
     coordsformatted = [float(i) for i in coords.split(",")][::-1]
     info = request.form["info"]
     geojson = {
