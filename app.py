@@ -5,6 +5,26 @@ import tempfile
 app = Flask(__name__)
 #TODO: Add secret key
 
+from bs4 import BeautifulSoup
+import re
+@app.before_first_request
+def init():
+    global l
+    for i in range(0,100,10):
+        url = "https://www.google.com/search?q='covid'+'testing'+'sites'+'open'&start="+str(i)
+        browser = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+        headers = {'User-Agent':browser,}
+        page = requests.get(url)
+        soup = BeautifulSoup(page.content, "lxml")
+        links = soup.findAll("a")
+        for link in  soup.find_all("a",href=re.compile("(?<=/url\?q=)(htt.*://.*)")):
+            l.append(re.split(":(?=http)",link["href"].replace("/url?q=",""))[0])
+    print(l)
+
+
+l = []
+inc = -1
+
 @app.route('/')
 def home():
     return render_template("index.html")
@@ -19,7 +39,11 @@ def map():
 
 @app.route('/crowd.html')
 def crowd():
-    return render_template("crowd.html")
+    global l
+    global inc
+    inc += 1
+    print(l)
+    return render_template("crowd.html", link=l[inc])
 
 peeps={"00001":{"name":"wqin2008@gmail.com", "score":100, "add":5, "check":5}} #TODO: Get from database
 
@@ -74,3 +98,23 @@ def add():
         r = requests.post(url, headers=headers, data=fil)
 
     return render_template("crowd.html")
+
+def start_runner():
+    def start_loop():
+        not_started = True
+        while not_started:
+            print('In start loop')
+            try:
+                r = requests.get('http://127.0.0.1:5000/')
+                if r.status_code == 200:
+                    print('Server started, quiting start_loop')
+                    not_started = False
+                print(r.status_code)
+            except:
+                print('Server not yet started')
+            time.sleep(2)
+
+def run():
+    from webapp import app
+    start_runner()
+    app.run(debug=True, use_reloader=False)
