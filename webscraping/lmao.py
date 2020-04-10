@@ -1,6 +1,7 @@
+from geopy.geocoders import Nominatim
 import requests
 import pprint
-from geopy.geocoders import Nominatim
+import csv
 
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -17,7 +18,7 @@ def database():
 	rows = raw.split('\\n')
 	header = rows[0].split('\\t')
 
-	bad = 0
+	num = 0
 	for r in range(1,len(rows)):
 		column = rows[r].split('\\t')
 		site = {}
@@ -46,19 +47,25 @@ def database():
 				site['Longitue'] = lon
 
 				print('(%s,%s)' %(lat,lon))
+				num += 1
+				addToCSV(header, site, num)
 				data.append(site)
 			except:
-				bad += 1
-		else:
-			bad += 1
+				pass
 	
-	print(bad)
 	return data
 
 def location(loc):
 	loc_url = 'https://www.google.com/maps/search/'+loc
 	loc = requests.get(loc_url).text
 	return ((loc.split('center=')[1]).split('&amp')[0]).split('%2C')
+
+def addToCSV(header, site, num):
+	with open('database.csv', mode='a', newline='') as file:
+		writer = csv.DictWriter(file, fieldnames=header)
+		if (num == 1):
+			writer.writeHeader()
+		writer.writerow(site)
 
 if __name__ == '__main__':
 	main()
