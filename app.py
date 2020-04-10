@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
+import traceback
+import data
 import json
 import requests
 import tempfile
@@ -92,16 +94,22 @@ def crowd():
 
             with open(tempname, "r") as fil:
                 r = requests.post(url, headers=headers, data=fil)
-        except:
-            pass
+            print(r.json().keys())
+            newlist = [x.encode() for x in r.json().keys()]
+            print(newlist)
+            if('error' not in newlist):
+                name=request.form["id"]
+                data.register(name)
+                data.giveUserPoints(name, 5)
+                data.userAdded(name)
+        except Exception:
+            traceback.print_exc()
     return render_template("crowd.html", link=l[inc])
-
-
-peeps={"00001":{"name":"wqin2008@gmail.com", "score":100, "add":5, "check":5}} #TODO: Get from database
 
 @app.route('/lead.html')
 def lead():
-    return render_template("lead.html", peeps=peeps)
+    mydict = {k: {k1.encode("utf-8"): v1 for k1, v1 in v.iteritems()} for k,v in data.getUsers()[0].iteritems()}
+    return render_template("lead.html", peeps=mydict)
 
 def start_runner():
     def start_loop():

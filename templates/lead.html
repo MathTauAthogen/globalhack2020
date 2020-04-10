@@ -26,10 +26,10 @@
         </tr>
         {% for i in peeps %}
         <tr>
-            <th> {{peeps[i]["name"]}} </th>
-            <th> {{peeps[i]["score"]}} </th>
-            <th> {{peeps[i]["add"]}} </th>
-            <th> {{peeps[i]["check"]}} </th>
+            <th> {{i}} </th>
+            <th> {{peeps[i]['points']}} </th>
+            <th> {{peeps[i]['additions']}} </th>
+            <th> {{peeps[i]['validations']}} </th>
         </tr>
         {% endfor %}
     </table>
