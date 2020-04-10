@@ -20,24 +20,24 @@
 Welcome to Contribute! Currently we don't have a validation site, only one to add/modify new testing sites. Please read the article below. Then, use the map to the right to determine the coordinates of one of the testing centers described in the article. If this article does not provide any new information about a testing site, please click "Skip". If, instead, there are multiple testing centers described and at least one is unmarked, please check "Return to the Pool". You will be awarded {{points}} points per addition/edit once your addition/edit has been checked. DO NOT refresh the page before you're done reading.
    <br/>
 <div height="50%" style="margin-bottom:30%">
-<iframe style="float:left" width="50%" height="50%" frameborder="0" src="https://firebase.google.com/docs/firestore/quickstart"></iframe>
+<iframe style="float:left" width="50%" height="50%" frameborder="0" src="https://www.baltimoresun.com/coronavirus/bs-md-pimlico-coronavirus-testing-20200409-voapiznqy5h5rgcdybewymqwny-story.html"></iframe>
 <iframe style="float:left" width="50%" height="50%" frameborder="0" allowfullscreen src="//umap.openstreetmap.fr/en/map/testing-locations_443103?scaleControl=true&miniMap=true&scrollWheelZoom=true&zoomControl=true&allowEdit=true&moreControl=true&searchControl=true&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=undefined&captionBar=false&fullscreenControl=false&locateControl=true&measureControl=false&editinosmControl=false#2/23.4/45.7"></iframe>
 </div>
-<form>
+<form method="post">
         <div class="input-field col s12">
-          <input id="coords" type="text" class="validate">
+          <input id="coords" name="coords" type="text" class="validate">
           <label for="coords">Coordinates Of Site</label>
         </div>
         <div class="input-field col s12">
-          <input id="name" type="text" class="validate">
+          <input id="name" name = "name" type="text" class="validate">
           <label for="name">Name Of Site</label>
         </div>
         <div class="input-field col s12">
-          <textarea id="info" class="materialize-textarea"></textarea>
+          <textarea id="info" name = "info" class="materialize-textarea"></textarea>
           <label for="info">Important Information About The Site</label>
         </div>
 <button class="btn waves-effect waves-light" type="submit" name="nopoints">Skip</button>
-<button class="btn waves-effect waves-light" type="submit" name="points">Continue</button>
+<button class="btn waves-effect waves-light" type="submit" name="points" formaction="/api/addplace">Continue</button>
 </form>
 </body>
 </html>
