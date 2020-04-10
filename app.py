@@ -63,10 +63,14 @@ def add():
         'Authorization': 'Token ' + api_key,
         'MapHub-API-Arg': json.dumps(args)
     }
-    with open("test.json", "w+") as fil:
-        fil.write(json.dumps(geojson))
 
-    with open("test.json", "r") as fil:
+    tempname = None
+
+    with tempfile.NamedTemporaryFile(delete=False) as fil:
+        fil.write(json.dumps(geojson))
+        tempname=fil.name
+
+    with open(tempname, "r") as fil:
         r = requests.post(url, headers=headers, data=fil)
 
     return render_template("crowd.html")
