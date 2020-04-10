@@ -21,7 +21,7 @@ def map():
 def crowd():
     return render_template("crowd.html")
 
-peeps={"00001":{"name":"William Qin", "score":100, "add":5, "check":5}} #TODO: Get from database
+peeps={"00001":{"name":"wqin2008@gmail.com", "score":100, "add":5, "check":5}} #TODO: Get from database
 
 @app.route('/lead.html')
 def lead():
@@ -31,7 +31,7 @@ def lead():
 def add():
     name = request.form["name"]
     coords = request.form["coords"]
-    coordsformatted = [int(i) for i in coords.split(",")]
+    coordsformatted = [float(i) for i in coords.split(",")][::-1]
     info = request.form["info"]
     geojson = {
         "markers": [], "type": "FeatureCollection", "properties": {}, "groups": [],
@@ -63,9 +63,10 @@ def add():
         'Authorization': 'Token ' + api_key,
         'MapHub-API-Arg': json.dumps(args)
     }
-    print(json.dumps(geojson))
-    with tempfile.TemporaryFile() as f:
-        json.dump(geojson, f)
-        r = requests.post(url, headers=headers, data=f)
-    print(r.json())
+    with open("test.json", "w+") as fil:
+        fil.write(json.dumps(geojson))
+
+    with open("test.json", "r") as fil:
+        r = requests.post(url, headers=headers, data=fil)
+
     return render_template("crowd.html")
