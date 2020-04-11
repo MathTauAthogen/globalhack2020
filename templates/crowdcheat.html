@@ -1,0 +1,50 @@
+<html>    
+     <head>
+         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+     <!-- Compiled and minified CSS -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+     <!-- Compiled and minified JavaScript -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+     </head>
+     <body>
+   <nav>
+<div class="nav-wrapper" style="background-color:#92AEB1">
+       <img height=65px src="{{ url_for('static', filename='cc.png') }}">
+       <ul id="nav-mobile" class="right hide-on-med-and-down">
+         <li><a href="index.html">HOME</a></li>
+         <li><a href="curr.html">MAP</a></li>
+         <li><a href="crowd.html">CONTRIBUTE</a></li>
+         <li><a href="lead.html">LEADERBOARD</a></li>
+       </ul>
+     </div>
+   </nav>
+<p style="margin-left:70px;margin-right:70px">
+Welcome to Contribute! Currently we don't have a validation site, only one to add/modify new testing sites. Please read the article below. Then, use the map to the right to determine the coordinates of one of the testing centers described in the article. If this article does not provide any new information about a testing site, please click "Skip". If, instead, there are multiple testing centers described and at least one is unmarked, please check "Return to the Pool". You will be awarded
+{{points}} points per addition/edit once your addition/edit has been checked. DO NOT refresh the page before you're done reading.</p>
+<h4> Important! When you type in your email address, replace "@" with "-at-" and "." with "-dot-"</h4>
+   <br/>
+<div height="50%" style="margin-bottom:30%">
+<iframe style="float:left" width="50%" height="50%" frameborder="0" src="https://www.click2houston.com/news/local/2020/04/08/galveston-county-health-district-opening-new-covid-19-testing-site/"></iframe>
+<iframe style="float:left" width="50%" height="50%" frameborder="0" allowfullscreen src="//umap.openstreetmap.fr/en/map/testing-locations_443103?scaleControl=true&miniMap=true&scrollWheelZoom=true&zoomControl=true&allowEdit=true&moreControl=true&searchControl=true&tilelayersControl=false&embedControl=false&datalayersControl=false&onLoadPanel=undefined&captionBar=false&fullscreenControl=false&locateControl=true&measureControl=false&editinosmControl=false#2/23.4/45.7"></iframe>
+</div>
+If there's a problem viewing the site, you can use this link: <a href="https://www.click2houston.com/news/local/2020/04/08/galveston-county-health-district-opening-new-covid-19-testing-site/">https://www.click2houston.com/news/local/2020/04/08/galveston-county-health-district-opening-new-covid-19-testing-site/</a>
+<form method="post">
+        <div class="input-field col s12">
+          <input id="id" name="id" type="text" class="validate">
+          <label for="id">What's your email address? We need this to be able to contact you for prizes. </label>
+        </div>
+        <div class="input-field col s12">
+          <input id="coords" name="coords" type="text" class="validate">
+          <label for="coords">Coordinates Of Site</label>
+        </div>
+        <div class="input-field col s12">
+          <input id="name" name = "name" type="text" class="validate">
+          <label for="name">Name Of Site</label>
+        </div>
+        <div class="input-field col s12">
+          <textarea id="info" name = "info" class="materialize-textarea"></textarea>
+          <label for="info">Important Information About The Site</label>
+        </div>
+    <p>
+      <label>
+        <input name="check" type="checkbox" />

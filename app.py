@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 import traceback
 import data
 import json
@@ -6,6 +6,10 @@ import requests
 import tempfile
 app = Flask(__name__)
 #TODO: Add secret key
+
+@app.route('/widgets/<path:filename>')
+def base_static(filename):
+    return send_from_directory(app.root_path + '/widgets/', filename)
 
 from bs4 import BeautifulSoup
 import re
